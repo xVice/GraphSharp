@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7DBBB435-7B7A-4742-8132-3ACECE3170EA}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>GraphSharp</RootNamespace>
     <AssemblyName>GraphSharp</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
