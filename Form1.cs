@@ -92,7 +92,7 @@ namespace GraphSharp
                 foreach (var view in views)
                 {
 
-                    PlotFunction(RunExpression(view.GetExpression()), view.GetPen());
+                    PlotFunction(RunExpression(view.GetExpression(), view.GetUsingDirectives()), view.GetPen());
                 }
             }
 
@@ -164,7 +164,7 @@ namespace GraphSharp
 
         }
 
-        private Func<float, float> RunExpression(string functionExpression)
+        private Func<float, float> RunExpression(string functionExpression, string[] usingDirectives)
         {
             if(!functionExpression.Contains("return "))
             {
@@ -179,6 +179,14 @@ namespace GraphSharp
             }
         }
     ";
+
+                foreach (var use in usingDirectives)
+                {
+                    code = $"using {use};" +
+                           $"{code}";
+                }
+
+
 
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 
@@ -241,6 +249,12 @@ namespace GraphSharp
             }
         }
     ";
+
+                foreach (var use in usingDirectives)
+                {
+                    code = $"using {use};" +
+                           $"{code}";
+                }
 
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 

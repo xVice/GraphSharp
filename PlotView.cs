@@ -21,6 +21,8 @@ namespace GraphSharp
         public string expression { get; set; }
         public Color color { get; set; }
 
+        private List<string> usingDirectives = new List<string>();
+
         private Form1 mainForm;
 
         [JsonConstructor]
@@ -49,6 +51,11 @@ namespace GraphSharp
         public string GetExpression()
         {
             return expression;
+        }
+
+        public string[] GetUsingDirectives()
+        {
+            return usingDirectives.ToArray();
         }
 
         public Pen GetPen()
@@ -89,6 +96,24 @@ namespace GraphSharp
         private void fastColoredTextBox1_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             expression = fastColoredTextBox1.Text;
+        }
+
+        private void hopeButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            string use = Microsoft.VisualBasic.Interaction.InputBox("Add or delete a using directive for this node, enter the name of the directive e.x: System.Drawing", "Add/Delete Using Directives", "System.Drawing");
+            if (usingDirectives.Contains(use))
+            {
+                usingDirectives.Remove(use);
+            }
+            else
+            {
+                usingDirectives.Add(use);
+            }
         }
     }
 }
