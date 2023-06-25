@@ -53,6 +53,8 @@ The application supports two types of mathematical expressions:
    ```
    - Note: Make sure to include the `return` statement in the multi-line expression to specify the result.
 
+You can also download a demo.json project [here](https://github.com/xVice/storage/blob/main/demo.json)
+
 ## Dependencies
 
 - .NET Framework 4.7.2 or later
