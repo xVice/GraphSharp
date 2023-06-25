@@ -2,6 +2,8 @@
 
 GraphSharp is a Windows Forms application for plotting mathematical functions. It allows users to input mathematical expressions and visualize the corresponding graphs.
 
+![graphsharp img](https://raw.githubusercontent.com/xVice/storage/main/graphsharp.PNG)
+
 ## Features
 
 - Plot custom mathematical functions
