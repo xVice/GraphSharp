@@ -41,14 +41,14 @@ The application supports two types of mathematical expressions:
 2. Multi-line Expression:
    - This type of expression allows for more complex calculations by using additional statements.
    - Example:
-     ```csharp
+   ```csharp
     float result = 0;
     for (int i = 0; i < 5; i++)
     {
         result += (float)Math.Sin(x * i);
     }
     return result;
-     ```
+   ```
    - Note: Make sure to include the `return` statement in the multi-line expression to specify the result.
 
 ## Dependencies
