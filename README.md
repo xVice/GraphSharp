@@ -21,6 +21,8 @@ To run the application, follow these steps:
 3. Build the solution to restore NuGet packages.
 4. Run the application by pressing F5.
 
+Or get the latest release, unzip it and run GraphSharp.exe!
+
 ## Usage
 
 1. Enter a mathematical expression in the input box.
