@@ -11,20 +11,13 @@ using System.Windows.Forms;
 
 namespace GraphSharp
 {
-    public class PlotViewJsonRep
-    {
-        public string expression { get; set; }
-        public Color color { get; set; }
-        public PlotViewJsonRep(string expression, Color color)
-        {
-            this.expression = expression;
-            this.color = color;
-        }
-    }
+
 
 
     public partial class PlotView : UserControl
     {
+  
+
         public string expression { get; set; }
         public Color color { get; set; }
 
@@ -65,7 +58,7 @@ namespace GraphSharp
 
         private void PlotView_Load(object sender, EventArgs e)
         {
-            richTextBox1.Text = expression;
+            fastColoredTextBox1.Text = expression;
             panel1.BackColor = color;
         }
 
@@ -87,14 +80,15 @@ namespace GraphSharp
             mainForm.RemoveExpView(this);
         }
 
-        private void richTextBox1_KeyPress(object sender, KeyPressEventArgs e)
+
+        private void fastColoredTextBox1_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
-     
+           
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void fastColoredTextBox1_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
-            expression = richTextBox1.Text;
+            expression = fastColoredTextBox1.Text;
         }
     }
 }

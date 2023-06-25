@@ -425,4 +425,15 @@ namespace GraphSharp
             return JsonConvert.SerializeObject(views, Formatting.Indented);
         }
     }
+    public class PlotViewJsonRep
+    {
+        public string expression { get; set; }
+        public Color color { get; set; }
+        public PlotViewJsonRep(string expression, Color color)
+        {
+            this.expression = expression;
+            this.color = color;
+        }
+    }
+
 }
