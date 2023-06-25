@@ -318,7 +318,7 @@ namespace GraphSharp
 
         private void graphArea_MouseMove(object sender, MouseEventArgs e)
         {
-            Text = $"GrapSharp - Mouse Position: ({(e.X - Width / 2) / Scale}, {-(e.Y - Height / 2) / Scale})";
+            Text = $"GraphSharp - Mouse Position: ({(e.X - Width / 2) / Scale}, {-(e.Y - Height / 2) / Scale})";
         }
 
         private void hopeButton4_Click(object sender, EventArgs e)
