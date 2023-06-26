@@ -27,6 +27,8 @@ namespace GraphSharp
         private Graphics graphics;
         private int Width, Height;
 
+        private StateForm stateForm;
+
         public Form1()
         {
 
@@ -104,7 +106,7 @@ namespace GraphSharp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-          
+            stateForm = new StateForm();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -164,38 +166,52 @@ namespace GraphSharp
 
         }
 
+        private string GenerateUsingDirectiveCode(string[] directives)
+        {
+            StringBuilder directivessb = new StringBuilder();
+            foreach (var directive in directives)
+            {
+                directivessb.AppendLine($"using {directive};");
+            }
+            return directivessb.ToString();
+        }
+        private float Foo = 0.1f;
+
+        private string GenerateVariableCode(Dictionary<string, float> variables)
+        {
+            StringBuilder declarations = new StringBuilder();
+            foreach (var variable in variables)
+            {
+                declarations.AppendLine($"private static float {variable.Key} = {variable.Value.ToString().Replace(",",".")}f;");
+            }
+            return declarations.ToString();
+        }
+
         private Func<float, float> RunExpression(string functionExpression, string[] usingDirectives)
         {
             if(!functionExpression.Contains("return "))
             {
-                string code = @"
-        using System;
+                string code = $@"using System;
+                                 {GenerateUsingDirectiveCode(usingDirectives)}
 
-        public class DynamicClass
-        {
-            public static float DynamicMethod(float input)
-            {
-                return (float)" + functionExpression + @";
-            }
-        }
-    ";
-
-                foreach (var use in usingDirectives)
-                {
-                    code = $"using {use};" +
-                           $"{code}";
-                }
-
-
-
+                                 
+                                 public class DynamicClass
+                                 {{
+                                      {GenerateVariableCode(stateForm.GetVariables())}
+                                      public static float DynamicMethod(float input)
+                                      {{
+                                           return (float){functionExpression};
+                                      }}
+                                 }}";
+      
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 
                 string assemblyName = "DynamicAssembly";
                 MetadataReference[] references = new MetadataReference[]
                 {
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Math).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Math).Assembly.Location)
                 };
 
                 CSharpCompilation compilation = CSharpCompilation.Create(
@@ -238,32 +254,27 @@ namespace GraphSharp
             }
             else
             {
-                string code = @"
-        using System;
+                string code = $@"using System;
+                                 {GenerateUsingDirectiveCode(usingDirectives)}
 
-        public class DynamicClass
-        {
-            public static float DynamicMethod(float input)
-            {
-                " + functionExpression + @";
-            }
-        }
-    ";
-
-                foreach (var use in usingDirectives)
-                {
-                    code = $"using {use};" +
-                           $"{code}";
-                }
+                                 
+                                 public class DynamicClass
+                                 {{
+                                      {GenerateVariableCode(stateForm.GetVariables())}
+                                      public static float DynamicMethod(float input)
+                                      {{
+                                           {functionExpression}
+                                      }}
+                                 }}";
 
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 
                 string assemblyName = "DynamicAssembly";
                 MetadataReference[] references = new MetadataReference[]
                 {
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Math).Assembly.Location)
+                    MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(Math).Assembly.Location)
                 };
 
                 CSharpCompilation compilation = CSharpCompilation.Create(
@@ -407,6 +418,16 @@ namespace GraphSharp
                     Console.WriteLine("Project not overridden.");
                 }
             }
+        }
+
+        private void hopeButton6_Click(object sender, EventArgs e)
+        {
+            stateForm.Show();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void Form1_Scroll(object sender, ScrollEventArgs e)

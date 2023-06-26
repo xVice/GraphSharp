@@ -38,6 +38,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.hopeButton1 = new ReaLTaiizor.Controls.HopeButton();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.hopeButton6 = new ReaLTaiizor.Controls.HopeButton();
             this.hopeButton5 = new ReaLTaiizor.Controls.HopeButton();
             this.hopeButton4 = new ReaLTaiizor.Controls.HopeButton();
             this.hopeButton3 = new ReaLTaiizor.Controls.HopeButton();
@@ -61,6 +62,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1551, 833);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // flowLayoutPanel1
             // 
@@ -179,6 +181,7 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.panel4.Controls.Add(this.hopeButton6);
             this.panel4.Controls.Add(this.hopeButton5);
             this.panel4.Controls.Add(this.hopeButton4);
             this.panel4.Controls.Add(this.hopeButton3);
@@ -187,6 +190,27 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1551, 36);
             this.panel4.TabIndex = 5;
+            // 
+            // hopeButton6
+            // 
+            this.hopeButton6.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.hopeButton6.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            this.hopeButton6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.hopeButton6.DangerColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.hopeButton6.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.hopeButton6.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.hopeButton6.HoverTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.hopeButton6.InfoColor = System.Drawing.Color.FromArgb(((int)(((byte)(144)))), ((int)(((byte)(147)))), ((int)(((byte)(153)))));
+            this.hopeButton6.Location = new System.Drawing.Point(292, 6);
+            this.hopeButton6.Name = "hopeButton6";
+            this.hopeButton6.PrimaryColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(158)))), ((int)(((byte)(255)))));
+            this.hopeButton6.Size = new System.Drawing.Size(69, 24);
+            this.hopeButton6.SuccessColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(194)))), ((int)(((byte)(58)))));
+            this.hopeButton6.TabIndex = 4;
+            this.hopeButton6.Text = "State";
+            this.hopeButton6.TextColor = System.Drawing.Color.White;
+            this.hopeButton6.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
+            this.hopeButton6.Click += new System.EventHandler(this.hopeButton6_Click);
             // 
             // hopeButton5
             // 
@@ -289,6 +313,7 @@
         private System.Windows.Forms.Panel panel4;
         private ReaLTaiizor.Controls.HopeButton hopeButton4;
         private ReaLTaiizor.Controls.HopeButton hopeButton5;
+        private ReaLTaiizor.Controls.HopeButton hopeButton6;
     }
 }
 
