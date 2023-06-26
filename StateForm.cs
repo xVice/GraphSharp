@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GraphSharp
@@ -60,6 +54,7 @@ namespace GraphSharp
                 var result2 = resultClass2.ShowDialog();
                 if(result2 == DialogResult.OK)
                 {
+                   
                     float variableValue = float.Parse(resultClass2.GetValue(), CultureInfo.InvariantCulture.NumberFormat);
                     floats.Add(variableName, variableValue);
                     ReloadFloatViews();

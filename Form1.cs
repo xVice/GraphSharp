@@ -198,7 +198,7 @@ namespace GraphSharp
                                  public class DynamicClass
                                  {{
                                       {GenerateVariableCode(stateForm.GetVariables())}
-                                      public static float DynamicMethod(float input)
+                                      public static float DynamicMethod(float lastPlot)
                                       {{
                                            return (float){functionExpression};
                                       }}
@@ -261,7 +261,7 @@ namespace GraphSharp
                                  public class DynamicClass
                                  {{
                                       {GenerateVariableCode(stateForm.GetVariables())}
-                                      public static float DynamicMethod(float input)
+                                      public static float DynamicMethod(float lastPlot)
                                       {{
                                            {functionExpression}
                                       }}
