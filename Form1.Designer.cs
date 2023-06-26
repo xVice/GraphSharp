@@ -123,7 +123,7 @@
             this.hopeRichTextBox1.Size = new System.Drawing.Size(299, 40);
             this.hopeRichTextBox1.TabIndex = 2;
             this.hopeRichTextBox1.TabStop = false;
-            this.hopeRichTextBox1.Text = "Math.Sin(input)";
+            this.hopeRichTextBox1.Text = "Math.Sin(x)";
             this.hopeRichTextBox1.UseSystemPasswordChar = false;
             // 
             // hopeButton2
@@ -285,8 +285,10 @@
             this.Name = "Form1";
             this.Text = "GraphSharp";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.ResizeBegin += new System.EventHandler(this.Form1_ResizeBegin);
             this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
+            this.ClientSizeChanged += new System.EventHandler(this.Form1_ClientSizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.Resize += new System.EventHandler(this.Form1_Resize);

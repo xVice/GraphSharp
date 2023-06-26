@@ -28,6 +28,7 @@ namespace GraphSharp
         private int Width, Height;
 
         private StateForm stateForm;
+        private Size oldSize = new Size();
 
         public Form1()
         {
@@ -43,26 +44,28 @@ namespace GraphSharp
 
         }
 
-        private void PlotFunction(Func<float, float> function, Pen pen)
+        private void PlotFunction(Func<(float, float), (float, float)> function, Pen pen)
         {
             try
             {
-                for (float x = -graphArea.Width / 2; x < graphArea.Width / 2; x += 1f / Scale)
+                for (float t = -graphArea.Width / 2; t < graphArea.Width / 2; t += 1f / Scale)
                 {
-                    if(function != null)
+                    if (function != null)
                     {
-                        float y = function(x / Scale) * Scale;
+                        var input = (t / Scale, -t / Scale);
+                        var output = function(input);
+                        float x = output.Item1 * Scale;
+                        float y = output.Item2 * Scale;
                         graphics.FillRectangle(pen.Brush, graphArea.Width / 2 + x, graphArea.Height / 2 - y, 1, 1);
                     }
-             
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Plot error..");
             }
-
         }
+
 
         private void graphArea_Paint(object sender, PaintEventArgs e)
         {
@@ -80,29 +83,23 @@ namespace GraphSharp
 
         private void Redraw()
         {
-            graphics.Clear(Color.FromArgb(20,20,20));
+            graphics.Clear(Color.FromArgb(20, 20, 20));
             DrawAxes();
-            // Add your function plots here using the PlotFunction method
-            // Example: PlotFunction(x => (float)Math.Sin(x), Pens.Red);
-            // You can plot multiple functions by calling PlotFunction multiple times
-            // Example 1: Quadratic function
 
             var views = flowLayoutPanel1.Controls.OfType<PlotView>().ToArray();
 
-            if (views.Count() != 0)
+            if (views.Length != 0)
             {
                 foreach (var view in views)
                 {
-
                     PlotFunction(RunExpression(view.GetExpression(), view.GetUsingDirectives()), view.GetPen());
                 }
             }
 
-            
-
             graphArea.Image = bitmap;
             graphArea.Refresh();
         }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -136,6 +133,9 @@ namespace GraphSharp
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
         {
+            if (oldSize == ClientSize)
+                return;
+
             bitmap = new Bitmap(graphArea.Width, graphArea.Height);
             graphics = Graphics.FromImage(bitmap);
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -145,7 +145,8 @@ namespace GraphSharp
         public void RemoveExpView(PlotView view)
         {
             flowLayoutPanel1.Controls.Remove(view);
-            
+            Redraw();
+
         }
 
         private void hopeButton2_Click(object sender, EventArgs e)
@@ -163,7 +164,7 @@ namespace GraphSharp
             flowLayoutPanel1.Controls.Add(new PlotView(this, hopeRichTextBox1.Text, selectedColor));
 
 
-
+            Redraw();
         }
 
         private string GenerateUsingDirectiveCode(string[] directives)
@@ -187,23 +188,24 @@ namespace GraphSharp
             return declarations.ToString();
         }
 
-        private Func<float, float> RunExpression(string functionExpression, string[] usingDirectives)
+        private Func<(float, float), (float, float)> RunExpression(string functionExpression, string[] usingDirectives)
         {
-            if(!functionExpression.Contains("return "))
+            if (!functionExpression.Contains("return "))
             {
                 string code = $@"using System;
-                                 {GenerateUsingDirectiveCode(usingDirectives)}
+                         {GenerateUsingDirectiveCode(usingDirectives)}
+                         
+                         public class DynamicClass
+                         {{
+                              {GenerateVariableCode(stateForm.GetVariables())}
+                              public static (float, float) DynamicMethod((float, float) tuple)
+                              {{
+                                   float x = tuple.Item1;
+                                   float y = tuple.Item2;
+                                   return (x, (float){functionExpression});
+                              }}
+                         }}";
 
-                                 
-                                 public class DynamicClass
-                                 {{
-                                      {GenerateVariableCode(stateForm.GetVariables())}
-                                      public static float DynamicMethod(float lastPlot)
-                                      {{
-                                           return (float){functionExpression};
-                                      }}
-                                 }}";
-      
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 
                 string assemblyName = "DynamicAssembly";
@@ -245,7 +247,7 @@ namespace GraphSharp
                         MethodInfo methodInfo = type.GetMethod("DynamicMethod");
 
                         // Create a Func<float, float> delegate from the dynamically created method
-                        var functionDelegate = (Func<float, float>)Delegate.CreateDelegate(typeof(Func<float, float>), methodInfo);
+                        var functionDelegate = (Func<(float, float), (float, float)>)Delegate.CreateDelegate(typeof(Func<(float, float),(float, float)>), methodInfo);
 
                         // Return the delegate
                         return functionDelegate;
@@ -255,17 +257,19 @@ namespace GraphSharp
             else
             {
                 string code = $@"using System;
-                                 {GenerateUsingDirectiveCode(usingDirectives)}
-
-                                 
-                                 public class DynamicClass
-                                 {{
-                                      {GenerateVariableCode(stateForm.GetVariables())}
-                                      public static float DynamicMethod(float lastPlot)
-                                      {{
-                                           {functionExpression}
-                                      }}
-                                 }}";
+                         {GenerateUsingDirectiveCode(usingDirectives)}
+                         
+                         public class DynamicClass
+                         {{
+                              {GenerateVariableCode(stateForm.GetVariables())}
+                              public static (float, float) DynamicMethod((float, float) tuple)
+                              {{
+                                   float x = tuple.Item1;
+                                   float y = tuple.Item2;
+                                   {functionExpression}
+                                   return (x, y);
+                              }}
+                         }}";
 
                 SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
 
@@ -308,7 +312,7 @@ namespace GraphSharp
                         MethodInfo methodInfo = type.GetMethod("DynamicMethod");
 
                         // Create a Func<float, float> delegate from the dynamically created method
-                        var functionDelegate = (Func<float, float>)Delegate.CreateDelegate(typeof(Func<float, float>), methodInfo);
+                        var functionDelegate = (Func<(float, float), (float, float)>)Delegate.CreateDelegate(typeof(Func<float, float>), methodInfo);
 
                         // Return the delegate
                         return functionDelegate;
@@ -428,6 +432,16 @@ namespace GraphSharp
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void Form1_ResizeBegin(object sender, EventArgs e)
+        {
+            oldSize = ClientSize;
+        }
+
+        private void Form1_ClientSizeChanged(object sender, EventArgs e)
+        {
+   
         }
 
         private void Form1_Scroll(object sender, ScrollEventArgs e)
