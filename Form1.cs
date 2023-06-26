@@ -190,7 +190,7 @@ namespace GraphSharp
 
         private Func<(float, float), (float, float)> RunExpression(string functionExpression, string[] usingDirectives)
         {
-            if (!functionExpression.Contains("return "))
+            if (!functionExpression.Contains(Environment.NewLine))
             {
                 string code = $@"using System;
                          {GenerateUsingDirectiveCode(usingDirectives)}
@@ -312,7 +312,7 @@ namespace GraphSharp
                         MethodInfo methodInfo = type.GetMethod("DynamicMethod");
 
                         // Create a Func<float, float> delegate from the dynamically created method
-                        var functionDelegate = (Func<(float, float), (float, float)>)Delegate.CreateDelegate(typeof(Func<float, float>), methodInfo);
+                        var functionDelegate = (Func<(float, float), (float, float)>)Delegate.CreateDelegate(typeof(Func<(float, float), (float, float)>), methodInfo);
 
                         // Return the delegate
                         return functionDelegate;
@@ -442,6 +442,12 @@ namespace GraphSharp
         private void Form1_ClientSizeChanged(object sender, EventArgs e)
         {
    
+        }
+
+        private void hopeButton7_Click(object sender, EventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            Redraw();
         }
 
         private void Form1_Scroll(object sender, ScrollEventArgs e)

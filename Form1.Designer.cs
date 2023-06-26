@@ -42,6 +42,7 @@
             this.hopeButton5 = new ReaLTaiizor.Controls.HopeButton();
             this.hopeButton4 = new ReaLTaiizor.Controls.HopeButton();
             this.hopeButton3 = new ReaLTaiizor.Controls.HopeButton();
+            this.hopeButton7 = new ReaLTaiizor.Controls.HopeButton();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.graphArea)).BeginInit();
             this.panel2.SuspendLayout();
@@ -150,6 +151,7 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.panel3.Controls.Add(this.hopeButton7);
             this.panel3.Controls.Add(this.hopeButton1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.Location = new System.Drawing.Point(0, 770);
@@ -173,7 +175,7 @@
             this.hopeButton1.Size = new System.Drawing.Size(120, 40);
             this.hopeButton1.SuccessColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(194)))), ((int)(((byte)(58)))));
             this.hopeButton1.TabIndex = 0;
-            this.hopeButton1.Text = "Replot";
+            this.hopeButton1.Text = "Plot";
             this.hopeButton1.TextColor = System.Drawing.Color.White;
             this.hopeButton1.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
             this.hopeButton1.Click += new System.EventHandler(this.hopeButton1_Click);
@@ -275,6 +277,27 @@
             this.hopeButton3.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
             this.hopeButton3.Click += new System.EventHandler(this.hopeButton3_Click);
             // 
+            // hopeButton7
+            // 
+            this.hopeButton7.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(223)))), ((int)(((byte)(230)))));
+            this.hopeButton7.ButtonType = ReaLTaiizor.Util.HopeButtonType.Primary;
+            this.hopeButton7.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.hopeButton7.DangerColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(108)))), ((int)(((byte)(108)))));
+            this.hopeButton7.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.hopeButton7.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.hopeButton7.HoverTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(49)))), ((int)(((byte)(51)))));
+            this.hopeButton7.InfoColor = System.Drawing.Color.FromArgb(((int)(((byte)(144)))), ((int)(((byte)(147)))), ((int)(((byte)(153)))));
+            this.hopeButton7.Location = new System.Drawing.Point(12, 11);
+            this.hopeButton7.Name = "hopeButton7";
+            this.hopeButton7.PrimaryColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(158)))), ((int)(((byte)(255)))));
+            this.hopeButton7.Size = new System.Drawing.Size(120, 40);
+            this.hopeButton7.SuccessColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(194)))), ((int)(((byte)(58)))));
+            this.hopeButton7.TabIndex = 1;
+            this.hopeButton7.Text = "Clear";
+            this.hopeButton7.TextColor = System.Drawing.Color.White;
+            this.hopeButton7.WarningColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(162)))), ((int)(((byte)(60)))));
+            this.hopeButton7.Click += new System.EventHandler(this.hopeButton7_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -316,6 +339,7 @@
         private ReaLTaiizor.Controls.HopeButton hopeButton4;
         private ReaLTaiizor.Controls.HopeButton hopeButton5;
         private ReaLTaiizor.Controls.HopeButton hopeButton6;
+        private ReaLTaiizor.Controls.HopeButton hopeButton7;
     }
 }
 
