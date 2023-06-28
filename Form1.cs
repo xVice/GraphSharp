@@ -26,6 +26,10 @@ namespace GraphSharp
         private Bitmap bitmap;
         private Graphics graphics;
         private int Width, Height;
+        private bool isDragging = false;
+        private Point mouseDownLocation;
+        private float offsetX = 0;
+        private float offsetY = 0;
 
         private StateForm stateForm;
         private Size oldSize = new Size();
@@ -39,6 +43,9 @@ namespace GraphSharp
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Text = "Grapsharp";
             ClientSize = new Size(Width, Height);
+            DoubleBuffered = true;
+            
+            
 
             InitializeComponent();
 
@@ -54,8 +61,8 @@ namespace GraphSharp
                     {
                         var input = (t / Scale, -t / Scale);
                         var output = function(input);
-                        float x = output.Item1 * Scale;
-                        float y = output.Item2 * Scale;
+                        float x = output.Item1 * Scale - offsetX;
+                        float y = output.Item2 * Scale - offsetY;
                         graphics.FillRectangle(pen.Brush, graphArea.Width / 2 + x, graphArea.Height / 2 - y, 1, 1);
                     }
                 }
@@ -67,6 +74,7 @@ namespace GraphSharp
         }
 
 
+
         private void graphArea_Paint(object sender, PaintEventArgs e)
         {
          
@@ -75,11 +83,64 @@ namespace GraphSharp
   
         }
 
+        private bool ShouldTick = false;
+
         private void DrawAxes()
         {
-            graphics.DrawLine(Pens.White, graphArea.Width / 2, 0, graphArea.Width / 2, graphArea.Height);
-            graphics.DrawLine(Pens.White, 0, graphArea.Height / 2, graphArea.Width, graphArea.Height / 2);
+            // Set up the axis line colors and font for labels
+            Pen axisLinePen = Pens.White;
+            Brush labelBrush = Brushes.White;
+            Font labelFont = new Font("Arial", 10);
+
+            // Calculate the maximum value for x-axis and y-axis based on the graph area and scale
+            float maxXValue = graphArea.Width / Scale;
+            float maxYValue = graphArea.Height / Scale;
+
+            // Calculate the position of the origin (0, 0) within the graph area
+            float originX = graphArea.Width / 2 + offsetX;
+            float originY = graphArea.Height / 2 + offsetY;
+
+            // Draw the x-axis
+            graphics.DrawLine(axisLinePen, 0, originY, graphArea.Right, originY);
+            for (float x = -maxXValue; x <= maxXValue; x += maxXValue / Scale)
+            {
+                float xPos = originX + x * Scale;
+                if (xPos >= 0 && xPos <= graphArea.Width)
+                {
+                    graphics.DrawLine(axisLinePen, xPos, originY - 5, xPos, originY + 5);
+                    string xLabel = x.ToString("0.000");
+                    if (xLabel != "0.000" && ShouldTick)
+                    {
+                        graphics.DrawString(xLabel, labelFont, labelBrush, xPos - 10, originY + 10);
+                    }
+                }
+            }
+
+            // Draw the y-axis
+            graphics.DrawLine(axisLinePen, originX, graphArea.Top, originX, graphArea.Bottom);
+            for (float y = -maxYValue; y <= maxYValue; y += maxYValue / Scale)
+            {
+                float yPos = originY - y * Scale;
+                if (yPos >= graphArea.Top && yPos <= graphArea.Bottom)
+                {
+                    graphics.DrawLine(axisLinePen, originX - 5, yPos, originX + 5, yPos);
+                    string yLabel = y.ToString("0.000");
+                    if (yLabel != "0.000" && ShouldTick)
+                    {
+                        graphics.DrawString(yLabel, labelFont, labelBrush, originX + 10, yPos - 10);
+                    }
+                }
+            }
         }
+
+
+
+
+
+
+
+
+
 
         private void Redraw()
         {
@@ -104,6 +165,14 @@ namespace GraphSharp
         private void Form1_Load(object sender, EventArgs e)
         {
             stateForm = new StateForm();
+            graphArea.MouseWheel += new MouseEventHandler(Scroll);
+            Redraw();
+        }
+
+        void Scroll(object sender, MouseEventArgs e)
+        {
+            Scale *= e.Delta > 0 ? 1.1f : 0.9f;
+            Redraw();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -347,6 +416,18 @@ namespace GraphSharp
 
         private void graphArea_MouseMove(object sender, MouseEventArgs e)
         {
+            if (isDragging)
+            {
+                int deltaX = e.X - mouseDownLocation.X;
+                int deltaY = e.Y - mouseDownLocation.Y;
+
+                offsetX += deltaX / Scale;
+                offsetY += deltaY / Scale;
+
+                mouseDownLocation = e.Location;
+
+                Redraw();
+            }
             Text = $"GraphSharp - Mouse Position: ({(e.X - Width / 2) / Scale}, {-(e.Y - Height / 2) / Scale})";
         }
 
@@ -444,16 +525,37 @@ namespace GraphSharp
    
         }
 
+        private void hopeCheckBox1_Click(object sender, EventArgs e)
+        {
+            ShouldTick = hopeCheckBox1.Checked;
+            Redraw();
+        }
+
+
+        private void graphArea_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isDragging = true;
+                mouseDownLocation = e.Location;
+            }
+        }
+
+        private void graphArea_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isDragging = false;
+            }
+        }
+
         private void hopeButton7_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
             Redraw();
         }
 
-        private void Form1_Scroll(object sender, ScrollEventArgs e)
-        {
-   
-        }
+
     }
 
     public class JsonExpressionsLoader
